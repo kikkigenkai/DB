@@ -1,20 +1,45 @@
-Варіант (опис обраної предметної галузі):
-  Сервіс перегляду аніме серіалів.
-  
-Вимоги звітування щодо пунктів 1-4 завдання:
-У звіті щодо пункту №1 завдання має бути:
-  •	Перелік сутностей з описом їх призначення;
-  •	Графічний файл розробленої моделі «сутність-зв’язок»;
-  •	Назва нотації.
-У звіті щодо пункту №2 завдання має бути:
-  •	Опис процесу перетворення (наприклад, “сутність А було перетворено у таблицю А, а зв’язок R (M:N) зумовив появу додаткової таблиці R1
-    тощо);
-  •	Схему бази даних у графічному вигляді з назвами таблиць (!) та
-    зв’язками між ними.
-У звіті щодо пункту №3 завдання має бути:
-  •	Пояснення щодо відповідності схеми бази даних нормальним формам НФ1, НФ2 та НФ3. У випадку невідповідності надати опис необхідних змін у схемі;
-  •	У випадку проведення змін у схемі бази даних надати оновлену версію схеми, інакше - не наводити схему.
-    У звіті щодо пункту №4 завдання має бути:
-  •	Навести копії екрану з pgAdmin4, що відображають назви та типи стовпців (доступне у закладці “Columns” властивостей “Properties”
-    таблиць дерева об’єктів у pgAdmin4);
-  •	Навести копії екрану з pgAdmin4, що відображають вміст таблиць бази даних у PostgreSQL. Таблиці на зображенні обов'язково повинні мати назву!
+# База даних аніме серіалів
+**Лабораторна робота 1**
+
+**студент групи КВ-82 Шеремет Дмитро**
+
+## Сутності:
+* Genre: 
+    * genre_id (Primary Key)
+    * g_name 
+* User 
+    * user_id (Primary Key)
+    * username
+    * registry_date
+    * user_pasport_id (Foreign Key)
+* Pasport 
+    * pasport_id (Primary Key)
+    * name 
+    * surname
+    * birth_date
+* Watched
+    * a_watched_id (Primary Key)
+    * watch_anime_id (Foreign Key)
+    * watch_user_id (Foreign Key)
+* Anime
+    * anime_id (Primary Key)
+    * a_name 
+    * genre (Foreign Key)
+    * description
+    * series
+* Review
+    * review_id (Primary Key)
+    * r_text
+    * user_id (Foreign Key)
+    * anime_id (Foreign Key)
+    
+## Зв'язки:
+* Many To Many: між User та Anime за допомогою таблиці Watched
+* One to Many: між Genre та Anime, Anime та Review, User та Review
+* One to 0ne: між User та Pasport
+   
+## ER Diagram
+![1](https://github.com/kikkigenkai/DB/blob/main/Untitled%20Diagram.png)
+
+## DB Structure
+![1](https://github.com/kikkigenkai/DB/blob/main/logic%20scheme.png)

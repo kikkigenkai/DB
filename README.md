@@ -39,7 +39,7 @@
 * One to 0ne: між User та Pasport
    
 ## ER Diagram
-![1](https://github.com/kikkigenkai/DB/blob/master/lab1/Untitled%20Diagram.png)
+![1](https://github.com/kikkigenkai/DB/blob/master/lab1/Untitled%20Diagram.jpg)
 
 ## DB Structure
 ![1](https://github.com/kikkigenkai/DB/blob/master/lab1/logic%20scheme%20v2.png)

@@ -32,15 +32,19 @@
     * r_text
     * user_id (Foreign Key)
     * anime_id (Foreign Key)
+ * user_pasport
+    * user_pasport_id (Primary Key)
+    * user_id (Foreign Key)
+    * pasport_id (Foreign Key)
     
 ## Зв'язки:
 * Many To Many: між User та Anime за допомогою таблиці Watched
 * One to Many: між Genre та Anime, Anime та Review, User та Review
-* One to 0ne: між User та Pasport
+* One to 0ne: між User та Pasport за допомогою таблиці User_Pasport
    
 ## ER Diagram
 ![1](https://github.com/kikkigenkai/DB/blob/master/lab1/Untitled%20Diagram.jpg)
 
 ## DB Structure
-![1](https://github.com/kikkigenkai/DB/blob/master/lab1/logic%20scheme%20v2.png)
+![1](https://github.com/kikkigenkai/DB/blob/master/lab1/logic%20scheme%20v3.png)
 

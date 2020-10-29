@@ -10,6 +10,8 @@ var TablesDB;
             console.log('Table User');
             console.log('Table Passport');
             console.log('Table Review');
+            console.log('Table User_Passport');
+            console.log('Table Watched');
             console.log('\nq to exit\n');
             console.log('   tips: *type table "table name" without quotes');
             console.log('           to pick any table from list.');
@@ -22,9 +24,9 @@ var TablesDB;
         static actionWithTable(tableName) {
             console.log('_____________________________________________________________');
             console.log(`Table ${tableName}:\n`);
-            console.log('Add data');
-            console.log('Edit data');
-            console.log('Remove data');
+            console.log('add data');
+            console.log('edit data');
+            console.log('remove data');
             console.log('tip: type command, for example, add');
             console.log('_____________________________________________________________');
         }

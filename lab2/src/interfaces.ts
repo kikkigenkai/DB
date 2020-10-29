@@ -1,5 +1,5 @@
 namespace TablesDB {
-    export interface Anime {
+    export type Anime = {
         length: number,
         columns: {
             a_name: string,
@@ -9,14 +9,14 @@ namespace TablesDB {
         }
     }
 
-    export interface Genre {
+    export type Genre = {
         length: number,
         columns: {
             g_name: string
         }
     }
 
-    export interface Passport {
+    export type Passport = {
         length: number,
         columns: {
             name: string,
@@ -25,7 +25,7 @@ namespace TablesDB {
         }
     }
 
-    export interface Review {
+    export type Review = {
         length: number,
         columns: {
             r_text: string,
@@ -34,7 +34,7 @@ namespace TablesDB {
         }
     }
 
-    export interface User {
+    export type User = {
         length: number,
         columns: {
             username: string,
@@ -42,7 +42,7 @@ namespace TablesDB {
         }
     }
 
-    export interface User_Passport {
+    export type User_Passport = {
         length: number,
         columns: {
             passport_id: number,
@@ -50,7 +50,7 @@ namespace TablesDB {
         }
     }
 
-    export interface Watched {
+    export type Watched = {
         length: number,
         columns: {
             watch_anime_id: number,

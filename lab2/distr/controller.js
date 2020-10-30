@@ -120,6 +120,96 @@ var TablesDB;
                         return true;
                     }
                 },
+                remove: async () => {
+                    if (currentTable) {
+                        switch (currentTable.toLowerCase()) {
+                            case 'anime': {
+                                Model.deleteDataAnime();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'genre': {
+                                Model.deleteDataGenre();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'passport': {
+                                Model.deleteDataPassport();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'review': {
+                                Model.deleteDataReview();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'user': {
+                                Model.deleteDataUser();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'user_passport': {
+                                Model.deleteDataUserPassport();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'watched': {
+                                Model.deleteDataWatched();
+                                currentTable = '';
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        console.log('No table selected');
+                        return true;
+                    }
+                },
+                show: async () => {
+                    if (currentTable) {
+                        switch (currentTable.toLowerCase()) {
+                            case 'anime': {
+                                Model.showDataAnime();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'genre': {
+                                Model.showDataGenre();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'passport': {
+                                Model.showDataPassport();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'review': {
+                                Model.showDataReview();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'user': {
+                                Model.showDataUser();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'user_passport': {
+                                Model.showDataUserPassport();
+                                currentTable = '';
+                                break;
+                            }
+                            case 'watched': {
+                                Model.showDataWatched();
+                                currentTable = '';
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        console.log('No table selected');
+                        return true;
+                    }
+                },
                 q: () => {
                     return true;
                 }

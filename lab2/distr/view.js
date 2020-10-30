@@ -27,6 +27,7 @@ var TablesDB;
             console.log('add data');
             console.log('edit data');
             console.log('remove data');
+            console.log('show data');
             console.log('tip: type command, for example, add');
             console.log('_____________________________________________________________');
         }

@@ -1,7 +1,7 @@
 "use strict";
 var TablesDB;
 (function (TablesDB) {
-    const { Pool, Client } = require('pg');
+    const { Client } = require('pg');
     const readLineSync = require('readline-sync');
     const client = new Client({
         user: 'postgres',
@@ -84,6 +84,70 @@ var TablesDB;
                 client.end();
             }
         }
+        static async deleteDataAnime() {
+            const aID = readLineSync.question('ID of anime for deleting: ');
+            const checkQuerry = 'SELECT anime_id FROM anime WHERE anime_id = $1';
+            const text = 'DELETE FROM anime WHERE anime_id = $1';
+            try {
+                const check = await client.query(checkQuerry, [aID]);
+                if (check.rows.length === 0) {
+                    console.log(`There is no record with anime_id = ${aID} in database`);
+                    client.end();
+                }
+                else {
+                    client.query(text, [aID])
+                        .then((res) => {
+                        console.log(`Row with anime_id = ${aID} has been deleted from table anime`);
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async showDataAnime() {
+            const text = 'SELECT * FROM anime';
+            try {
+                const res = await client.query(text);
+                if (res.rows.length === 0) {
+                    console.log('Table anime is empty');
+                    client.end();
+                }
+                else {
+                    console.log('anime_id |     a_name     |          description          | series | genre');
+                    console.log('__________________________________________________________________________');
+                    res.rows.forEach((item) => {
+                        let modName = '';
+                        let modDescr = '';
+                        if (item.a_name.length > 16) {
+                            modName = item.a_name.substr(0, 13) + '...';
+                        }
+                        else {
+                            modName = Model.formatField(16, item.a_name);
+                        }
+                        if (item.description.length > 31) {
+                            modDescr = item.description.substr(0, 28) + '...';
+                        }
+                        else {
+                            modDescr = Model.formatField(31, item.description);
+                        }
+                        console.log(`${Model.formatField(9, item.anime_id.toString())}|${modName}|${modDescr}|${Model.formatField(8, item.series.toString())}|${item.genre}`);
+                        console.log('__________________________________________________________________________');
+                    });
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
         static prepareDataGenre() {
             let genreRow = {
                 length: 1,
@@ -136,6 +200,63 @@ var TablesDB;
             }
             catch (err) {
                 console.log(err.detail);
+                client.end();
+            }
+        }
+        static async deleteDataGenre() {
+            const gID = readLineSync.question('ID of genre for deleting: ');
+            const checkQuerry = 'SELECT genre_id FROM genre WHERE genre_id = $1';
+            const text = 'DELETE FROM genre WHERE genre_id = $1';
+            try {
+                const check = await client.query(checkQuerry, [gID]);
+                if (check.rows.length === 0) {
+                    console.log(`There is no record with genre_id = ${gID} in database`);
+                    client.end();
+                }
+                else {
+                    client.query(text, [gID])
+                        .then((res) => {
+                        console.log(`Row with genre_id = ${gID} has been deleted from table genre`);
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async showDataGenre() {
+            const text = 'SELECT * FROM genre';
+            try {
+                const res = await client.query(text);
+                if (res.rows.length === 0) {
+                    console.log('Table genre is empty');
+                    client.end();
+                }
+                else {
+                    console.log('genre_id |        g_name       ');
+                    console.log('_______________________________');
+                    res.rows.forEach((item) => {
+                        let modGName = '';
+                        if (item.g_name.length > 21) {
+                            modGName = item.a_name.substr(0, 18) + '...';
+                        }
+                        else {
+                            modGName = Model.formatField(21, item.g_name);
+                        }
+                        console.log(`${Model.formatField(9, item.genre_id.toString())}|${modGName}`);
+                        console.log('_______________________________');
+                    });
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log(err);
                 client.end();
             }
         }
@@ -197,6 +318,70 @@ var TablesDB;
             }
             catch (err) {
                 console.log(err.detail);
+            }
+        }
+        static async deleteDataPassport() {
+            const pID = readLineSync.question('ID of passport for deleting: ');
+            const checkQuerry = 'SELECT passport_id FROM passport WHERE passport_id = $1';
+            const text = 'DELETE FROM passport WHERE passport_id = $1';
+            try {
+                const check = await client.query(checkQuerry, [pID]);
+                if (check.rows.length === 0) {
+                    console.log(`There is no record with passport_id = ${pID} in database`);
+                    client.end();
+                }
+                else {
+                    client.query(text, [pID])
+                        .then((res) => {
+                        console.log(`Row with passport_id = ${pID} has been deleted from table passport`);
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async showDataPassport() {
+            const text = 'SELECT * FROM passport';
+            try {
+                const res = await client.query(text);
+                if (res.rows.length === 0) {
+                    console.log('Table passport is empty');
+                    client.end();
+                }
+                else {
+                    console.log('passport_id |        name       |        surname       |  birth_date ');
+                    console.log('_____________________________________________________________________');
+                    res.rows.forEach((item) => {
+                        let modName = '';
+                        let modSurname = '';
+                        if (item.name.length > 19) {
+                            modName = item.name.substr(0, 16) + '...';
+                        }
+                        else {
+                            modName = Model.formatField(19, item.name);
+                        }
+                        if (item.surname.length > 22) {
+                            modSurname = item.surname.substr(0, 19) + '...';
+                        }
+                        else {
+                            modSurname = Model.formatField(22, item.surname);
+                        }
+                        console.log(`${Model.formatField(12, item.passport_id.toString())}|${modName}|${modSurname}|${Model.formatDate(item.birth_date)}`);
+                        console.log('_____________________________________________________________________');
+                    });
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
             }
         }
         static prepareDataReview() {
@@ -269,6 +454,63 @@ var TablesDB;
                 console.log(err.detail);
             }
         }
+        static async deleteDataReview() {
+            const rID = readLineSync.question('ID of review for deleting: ');
+            const checkQuerry = 'SELECT review_id FROM review WHERE review_id = $1';
+            const text = 'DELETE FROM review WHERE review_id = $1';
+            try {
+                const check = await client.query(checkQuerry, [rID]);
+                if (check.rows.length === 0) {
+                    console.log(`There is no record with review_id = ${rID} in database`);
+                    client.end();
+                }
+                else {
+                    client.query(text, [rID])
+                        .then((res) => {
+                        console.log(`Row with review_id = ${rID} has been deleted from table review`);
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async showDataReview() {
+            const text = 'SELECT * FROM review';
+            try {
+                const res = await client.query(text);
+                if (res.rows.length === 0) {
+                    console.log('Table review is empty');
+                    client.end();
+                }
+                else {
+                    console.log('review_id |        r_text       |    user_id    |  anime_id ');
+                    console.log('____________________________________________________________');
+                    res.rows.forEach((item) => {
+                        let modRText = '';
+                        if (item.r_text.length > 21) {
+                            modRText = item.r_text.substr(0, 18) + '...';
+                        }
+                        else {
+                            modRText = Model.formatField(21, item.r_text);
+                        }
+                        console.log(`${Model.formatField(10, item.review_id.toString())}|${modRText}|${Model.formatField(15, item.user_id.toString())}|${item.anime_id}`);
+                        console.log('____________________________________________________________');
+                    });
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
         static prepareDataUser() {
             let userRow = {
                 length: 2,
@@ -324,6 +566,63 @@ var TablesDB;
             }
             catch (err) {
                 console.log('Something went wrong');
+                client.end();
+            }
+        }
+        static async deleteDataUser() {
+            const rID = readLineSync.question('ID of user for deleting: ');
+            const checkQuerry = 'SELECT user_id FROM "user" WHERE user_id = $1';
+            const text = 'DELETE FROM "user" WHERE user_id = $1';
+            try {
+                const check = await client.query(checkQuerry, [rID]);
+                if (check.rows.length === 0) {
+                    console.log(`There is no record with user_id = ${rID} in database`);
+                    client.end();
+                }
+                else {
+                    client.query(text, [rID])
+                        .then((res) => {
+                        console.log(`Row with user_id = ${rID} has been deleted from table user`);
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async showDataUser() {
+            const text = 'SELECT * FROM "user"';
+            try {
+                const res = await client.query(text);
+                if (res.rows.length === 0) {
+                    console.log('Table user is empty');
+                    client.end();
+                }
+                else {
+                    console.log('user_id |        username       |  registry_date');
+                    console.log('________________________________________________');
+                    res.rows.forEach((item) => {
+                        let modUName = '';
+                        if (item.username.length > 23) {
+                            modUName = item.username.substr(0, 20) + '...';
+                        }
+                        else {
+                            modUName = Model.formatField(23, item.username);
+                        }
+                        console.log(`${Model.formatField(8, item.user_id.toString())}|${modUName}|${Model.formatDate(item.registry_date)}`);
+                        console.log('________________________________________________');
+                    });
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log(err);
                 client.end();
             }
         }
@@ -404,6 +703,56 @@ var TablesDB;
                 client.end();
             }
         }
+        static async deleteDataUserPassport() {
+            const rID = readLineSync.question('ID of user_passport record for deleting: ');
+            const checkQuerry = 'SELECT user_passport_id FROM user_passport WHERE user_passport_id = $1';
+            const text = 'DELETE FROM user_passport WHERE user_passport_id = $1';
+            try {
+                const check = await client.query(checkQuerry, [rID]);
+                if (check.rows.length === 0) {
+                    console.log(`There is no record with user_passport_id = ${rID} in database`);
+                    client.end();
+                }
+                else {
+                    client.query(text, [rID])
+                        .then((res) => {
+                        console.log(`Row with user_passport_id = ${rID} has been deleted from table user_passport`);
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async showDataUserPassport() {
+            const text = 'SELECT * FROM user_passport';
+            try {
+                const res = await client.query(text);
+                if (res.rows.length === 0) {
+                    console.log('Table user_passport is empty');
+                    client.end();
+                }
+                else {
+                    console.log('user_passport_id |  user_id  |  passport_id');
+                    console.log('___________________________________________');
+                    res.rows.forEach((item) => {
+                        console.log(`${Model.formatField(17, item.user_id.toString())}|${Model.formatField(11, item.user_id.toString())}|${item.passport_id}`);
+                        console.log('___________________________________________');
+                    });
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
         static prepareDataWatched() {
             let watchRow = {
                 length: 2,
@@ -480,6 +829,56 @@ var TablesDB;
                 client.end();
             }
         }
+        static async deleteDataWatched() {
+            const wID = readLineSync.question('ID of watch record for deleting: ');
+            const checkQuerry = 'SELECT a_watched_id FROM watched WHERE a_watched_id = $1';
+            const text = 'DELETE FROM watched WHERE a_watched_id = $1';
+            try {
+                const check = await client.query(checkQuerry, [wID]);
+                if (check.rows.length === 0) {
+                    console.log(`There is no record with a_watched_id = ${wID} in database`);
+                    client.end();
+                }
+                else {
+                    client.query(text, [wID])
+                        .then((res) => {
+                        console.log(`Row with a_watched_id = ${wID} has been deleted from table watched`);
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async showDataWatched() {
+            const text = 'SELECT * FROM watched';
+            try {
+                const res = await client.query(text);
+                if (res.rows.length === 0) {
+                    console.log('Table watched is empty');
+                    client.end();
+                }
+                else {
+                    console.log('a_watched_id | watch_anime_id | watch_user_id');
+                    console.log('_____________________________________________');
+                    res.rows.forEach((item) => {
+                        console.log(`${Model.formatField(13, item.a_watched_id.toString())}|${Model.formatField(16, item.watch_anime_id.toString())}|${item.watch_user_id}`);
+                        console.log('_____________________________________________');
+                    });
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
         static formatDate(date) {
             let dd = date.getDate().toString();
             let mm = (date.getMonth() + 1).toString();
@@ -494,6 +893,13 @@ var TablesDB;
                 yy = '0' + yy;
             }
             return dd + '.' + mm + '.' + yy;
+        }
+        static formatField(len, str) {
+            let newStr = str;
+            while (newStr.length < len) {
+                newStr += ' ';
+            }
+            return newStr;
         }
     }
     module.exports = { Model, client };

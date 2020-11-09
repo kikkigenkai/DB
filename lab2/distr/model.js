@@ -389,23 +389,23 @@ var TablesDB;
                 length: 3,
                 columns: {
                     r_text: '',
-                    user_id: 0,
-                    anime_id: 0
+                    rev_user_id: 0,
+                    rev_anime_id: 0
                 }
             };
             reviewRow.columns.r_text = readLineSync.question('review text: ');
-            reviewRow.columns.user_id = readLineSync.question('review author id: ');
-            reviewRow.columns.anime_id = readLineSync.question('review anime id: ');
+            reviewRow.columns.rev_user_id = readLineSync.question('review author id: ');
+            reviewRow.columns.rev_anime_id = readLineSync.question('review anime id: ');
             return reviewRow;
         }
         static addDataReview(reviewRow) {
-            const text = 'INSERT INTO review (r_text, user_id, anime_id) VALUES ($1, $2, $3)';
-            const values = [reviewRow.columns.r_text, reviewRow.columns.user_id, reviewRow.columns.anime_id];
+            const text = 'INSERT INTO review (r_text, rev_user_id, rev_anime_id) VALUES ($1, $2, $3)';
+            const values = [reviewRow.columns.r_text, reviewRow.columns.rev_user_id, reviewRow.columns.rev_anime_id];
             const checkQuerry = 'SELECT uu.user_id, aa.anime_id FROM "user" AS uu JOIN anime AS aa ON uu.user_id = $1 AND aa.anime_id = $2';
-            const checkValues = [reviewRow.columns.user_id, reviewRow.columns.anime_id];
+            const checkValues = [reviewRow.columns.rev_user_id, reviewRow.columns.rev_anime_id];
             client.query(checkQuerry, checkValues, async (err, res) => {
                 if (res.rows.length === 0) {
-                    console.log(`There is no user_id = ${reviewRow.columns.user_id} or anime_id = ${reviewRow.columns.anime_id} in database`);
+                    console.log(`There is no user_id = ${reviewRow.columns.rev_user_id} or anime_id = ${reviewRow.columns.rev_anime_id} in database`);
                     await client.end();
                 }
                 else {
@@ -424,7 +424,7 @@ var TablesDB;
         static async editDataReview() {
             const rID = readLineSync.question('ID of review for editing: ');
             const checkText = 'SELECT review_id FROM review where review_id = $1';
-            const text = 'UPDATE review SET r_text = $1, user_id = $2, anime_id = $3 WHERE review_id = $4';
+            const text = 'UPDATE review SET r_text = $1, rev_user_id = $2, rev_anime_id = $3 WHERE review_id = $4';
             try {
                 const check = await client.query(checkText, [rID]);
                 if (check.rows.length === 0) {
@@ -435,8 +435,8 @@ var TablesDB;
                     const newRow = this.prepareDataReview();
                     const values = [
                         newRow.columns.r_text,
-                        newRow.columns.user_id,
-                        newRow.columns.anime_id,
+                        newRow.columns.rev_user_id,
+                        newRow.columns.rev_anime_id,
                         rID
                     ];
                     client.query(text, values)
@@ -490,7 +490,7 @@ var TablesDB;
                     client.end();
                 }
                 else {
-                    console.log('review_id |        r_text       |    user_id    |  anime_id ');
+                    console.log('review_id |        r_text       |    rev_user_id    |  rev_anime_id ');
                     console.log('____________________________________________________________');
                     res.rows.forEach((item) => {
                         let modRText = '';
@@ -500,7 +500,7 @@ var TablesDB;
                         else {
                             modRText = Model.formatField(21, item.r_text);
                         }
-                        console.log(`${Model.formatField(10, item.review_id.toString())}|${modRText}|${Model.formatField(15, item.user_id.toString())}|${item.anime_id}`);
+                        console.log(`${Model.formatField(10, item.review_id.toString())}|${modRText}|${Model.formatField(19, item.rev_user_id.toString())}|${item.rev_anime_id}`);
                         console.log('____________________________________________________________');
                     });
                     client.end();
@@ -516,7 +516,7 @@ var TablesDB;
                 length: 2,
                 columns: {
                     username: '',
-                    registry_date: ''
+                    registry_date: '',
                 }
             };
             userRow.columns.username = readLineSync.question('user nickname: ');
@@ -605,8 +605,8 @@ var TablesDB;
                     client.end();
                 }
                 else {
-                    console.log('user_id |        username       |  registry_date');
-                    console.log('________________________________________________');
+                    console.log('user_id |        username       |  registry_date  | confirmed');
+                    console.log('_____________________________________________________________');
                     res.rows.forEach((item) => {
                         let modUName = '';
                         if (item.username.length > 23) {
@@ -615,8 +615,8 @@ var TablesDB;
                         else {
                             modUName = Model.formatField(23, item.username);
                         }
-                        console.log(`${Model.formatField(8, item.user_id.toString())}|${modUName}|${Model.formatDate(item.registry_date)}`);
-                        console.log('________________________________________________');
+                        console.log(`${Model.formatField(8, item.user_id.toString())}|${modUName}|${Model.formatField(17, Model.formatDate(item.registry_date))}|${item.confirmed}`);
+                        console.log('_____________________________________________________________');
                     });
                     client.end();
                 }
@@ -630,29 +630,29 @@ var TablesDB;
             let userPassportRow = {
                 length: 2,
                 columns: {
-                    passport_id: 0,
-                    user_id: 0
+                    up_passport_id: 0,
+                    up_user_id: 0
                 }
             };
-            userPassportRow.columns.passport_id = readLineSync.question('user passport id: ');
-            userPassportRow.columns.user_id = readLineSync.question('user id: ');
+            userPassportRow.columns.up_passport_id = readLineSync.question('user passport id: ');
+            userPassportRow.columns.up_user_id = readLineSync.question('user id: ');
             return userPassportRow;
         }
         static addDataUserPassport(usPasRow) {
-            const text = 'INSERT INTO user_passport (user_id, passport_id) VALUES ($1, $2)';
-            const values = [usPasRow.columns.user_id, usPasRow.columns.passport_id];
+            const text = 'INSERT INTO user_passport (up_user_id, up_passport_id) VALUES ($1, $2)';
+            const values = [usPasRow.columns.up_user_id, usPasRow.columns.up_passport_id];
             const checkQuerry = 'SELECT uu.user_id, pp.passport_id FROM "user" AS uu JOIN passport AS pp ON uu.user_id = $1 AND pp.passport_id = $2';
-            const checkValues = [usPasRow.columns.user_id, usPasRow.columns.passport_id];
-            const uniqueCheck = 'SELECT user_id, passport_id FROM user_passport AS up WHERE up.user_id = $1 AND up.passport_id = $2;';
+            const checkValues = [usPasRow.columns.up_user_id, usPasRow.columns.up_passport_id];
+            const uniqueCheck = 'SELECT up_user_id, up_passport_id FROM user_passport AS up WHERE up.up_user_id = $1 AND up.up_passport_id = $2;';
             client.query(uniqueCheck, checkValues, async (err, res) => {
                 if (res.rows.length !== 0) {
-                    console.log(`Row with user_id = ${usPasRow.columns.user_id} and passport_id = ${usPasRow.columns.passport_id} already exists in table user_passport`);
+                    console.log(`Row with up_user_id = ${usPasRow.columns.up_user_id} and up_passport_id = ${usPasRow.columns.up_passport_id} already exists in table user_passport`);
                     await client.end();
                 }
                 else {
                     client.query(checkQuerry, checkValues, async (err, res) => {
                         if (res.rows.length === 0) {
-                            console.log(`There is no user_id = ${usPasRow.columns.user_id} or passport_id = ${usPasRow.columns.passport_id} in database`);
+                            console.log(`There is no up_user_id = ${usPasRow.columns.up_user_id} or up_passport_id = ${usPasRow.columns.up_passport_id} in database`);
                             await client.end();
                         }
                         else {
@@ -673,7 +673,7 @@ var TablesDB;
         static async editDataUserPassport() {
             const upID = readLineSync.question('ID of user_passport record for editing: ');
             const checkText = 'SELECT user_passport_id FROM user_passport where user_passport_id = $1';
-            const text = 'UPDATE user_passport SET user_id = $1, passport_id = $2 WHERE user_passport_id = $3';
+            const text = 'UPDATE user_passport SET up_user_id = $1, up_passport_id = $2 WHERE user_passport_id = $3';
             try {
                 const check = await client.query(checkText, [upID]);
                 if (check.rows.length === 0) {
@@ -683,8 +683,8 @@ var TablesDB;
                 else {
                     const newRow = this.prepareDataUserPassport();
                     const values = [
-                        newRow.columns.user_id,
-                        newRow.columns.passport_id,
+                        newRow.columns.up_user_id,
+                        newRow.columns.up_passport_id,
                         upID
                     ];
                     client.query(text, values)
@@ -739,11 +739,11 @@ var TablesDB;
                     client.end();
                 }
                 else {
-                    console.log('user_passport_id |  user_id  |  passport_id');
-                    console.log('___________________________________________');
+                    console.log('user_passport_id |  up_user_id  |  up_passport_id');
+                    console.log('_________________________________________________');
                     res.rows.forEach((item) => {
-                        console.log(`${Model.formatField(17, item.user_id.toString())}|${Model.formatField(11, item.user_id.toString())}|${item.passport_id}`);
-                        console.log('___________________________________________');
+                        console.log(`${Model.formatField(17, item.user_id.toString())}|${Model.formatField(14, item.user_id.toString())}|${item.passport_id}`);
+                        console.log('_________________________________________________');
                     });
                     client.end();
                 }
@@ -765,7 +765,7 @@ var TablesDB;
             watchRow.columns.watch_user_id = readLineSync.question('user id: ');
             return watchRow;
         }
-        static addDataWatched(watchRow) {
+        static async addDataWatched(watchRow) {
             const text = 'INSERT INTO watched (watch_anime_id, watch_user_id) VALUES ($1, $2)';
             const values = [watchRow.columns.watch_anime_id, watchRow.columns.watch_user_id];
             const checkQuerry = 'SELECT uu.user_id, aa.anime_id FROM "user" AS uu JOIN anime AS aa ON aa.anime_id = $1 AND uu.user_id = $2';
@@ -876,6 +876,262 @@ var TablesDB;
             }
             catch (err) {
                 console.log(err);
+                client.end();
+            }
+        }
+        static generateRows() {
+            const text = `
+                insert into "user" (username, registry_date, confirmed)
+                select substr(characters, (random() * length(characters) + 1)::integer, 10),
+                timestamp '2018-01-10' + random() * (timestamp '2018-01-20' - timestamp '2018-01-10'),
+                cast(cast(round(random()) as character varying) as boolean)
+                from (values('qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM')) as symbols(characters), generate_series(1, 10000);
+            `;
+            const start = Date.now();
+            client.query(text)
+                .then((res) => {
+                console.log('10000 rows in table user has been generated');
+                console.log(`query time: ${Date.now() - start}ms`);
+                client.end();
+            })
+                .catch((err) => {
+                console.log(err.detail);
+                client.end();
+            });
+        }
+        static async staticConfirmed() {
+            const text = `
+                with confirmedUsers as (
+                    select user_id, username from "user" 
+                    where confirmed = true and user_id in (select rev_user_id from review where user_id = review.rev_user_id))
+                
+                select user_id, username from confirmedUsers join review as rv on confirmedUsers.user_id = rv.rev_user_id;
+            `;
+            try {
+                const start = Date.now();
+                const res = await client.query(text);
+                const queryTime = Date.now() - start;
+                if (res.rows.length === 0) {
+                    console.log('There is no result for your query');
+                    client.end();
+                }
+                else {
+                    console.log('user_id |    username   ');
+                    console.log('________________________');
+                    res.rows.forEach((item) => {
+                        console.log(`${Model.formatField(8, item.user_id.toString())}|${item.username}`);
+                        console.log('________________________');
+                    });
+                    console.log(`query time: ${queryTime}ms`);
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
+        }
+        static async staticBorn() {
+            const text = `
+                with up_born as (
+                    select up_user_id, up_passport_id from user_passport
+                    where up_user_id in (select passport_id from passport where birth_date > '20000101')
+                )
+                
+                select user_id, username from "user" 
+                where confirmed = true and user_id in (select up_user_id from up_born)
+            `;
+            try {
+                const start = Date.now();
+                const res = await client.query(text);
+                const queryTime = Date.now() - start;
+                if (res.rows.length === 0) {
+                    console.log('There is no result for your query');
+                    client.end();
+                }
+                else {
+                    console.log('user_id |    username   ');
+                    console.log('________________________');
+                    res.rows.forEach((item) => {
+                        console.log(`${Model.formatField(8, item.user_id.toString())}|${item.username}`);
+                        console.log('________________________');
+                    });
+                    console.log(`query time: ${queryTime}ms`);
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
+        }
+        static async mostPopularAnime() {
+            const text = `
+                with count_views as (
+                    select watch_anime_id, count(*) as cnt from watched
+                    group by watch_anime_id
+                ),
+                
+                max_views as (
+                    select * from count_views
+                    where cnt in (select max(cnt) as mx from count_views)
+                )
+                
+                select an.anime_id, an.a_name, cnt from anime an 
+                join max_views on an.anime_id = max_views.watch_anime_id
+            `;
+            try {
+                const start = Date.now();
+                const res = await client.query(text);
+                const queryTime = Date.now() - start;
+                if (res.rows.length === 0) {
+                    console.log('There is no result for your query');
+                    client.end();
+                }
+                else {
+                    console.log('anime_id |       a_name       |  views');
+                    console.log('______________________________________');
+                    res.rows.forEach((item) => {
+                        let modAName = '';
+                        if (item.a_name.length > 20) {
+                            modAName = item.a_name.substr(0, 17) + '...';
+                        }
+                        else {
+                            modAName = Model.formatField(20, item.a_name);
+                        }
+                        console.log(`${Model.formatField(9, item.anime_id.toString())}|${modAName}|${item.cnt}`);
+                        console.log('______________________________________');
+                    });
+                    console.log(`query time: ${queryTime}ms`);
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
+        }
+        static async specDateReg() {
+            const text = `
+                with confUsers as (
+                    select * from "user" where confirmed = true
+                ),
+                
+                specDate as (
+                    select * from confUsers where registry_date > $1 and registry_date < $2
+                )
+                
+                select * from specDate 
+            `;
+            const fromDate = readLineSync.question('from date: ');
+            const toDate = readLineSync.question('to date: ');
+            try {
+                const start = Date.now();
+                const res = await client.query(text, [fromDate, toDate]);
+                const queryTime = Date.now() - start;
+                if (res.rows.length === 0) {
+                    console.log('There is no result for your query');
+                    client.end();
+                }
+                else {
+                    console.log('user_id |    username   | registry_date');
+                    console.log('_______________________________________');
+                    res.rows.forEach((item) => {
+                        console.log(`${Model.formatField(8, item.user_id.toString())}|${Model.formatField(15, item.username)}|${Model.formatDate(item.registry_date)}`);
+                        console.log('_______________________________________');
+                    });
+                    console.log(`query time: ${queryTime}ms`);
+                    client.end();
+                }
+                client.end();
+            }
+            catch (err) {
+                console.log(err);
+                client.end();
+            }
+        }
+        static async specGenreAnime() {
+            const text = `
+                select * from anime where genre in (select genre_id from genre where g_name = $1)
+            `;
+            const genreName = readLineSync.question('genre name: ');
+            try {
+                const start = Date.now();
+                const res = await client.query(text, [genreName]);
+                const queryTime = Date.now() - start;
+                if (res.rows.length === 0) {
+                    console.log(`There is no anime with genre ${genreName} in database`);
+                    client.end();
+                }
+                else {
+                    console.log('anime_id |     a_name     |          description          | series |  genre');
+                    console.log('_______________________________________________________________________________');
+                    res.rows.forEach((item) => {
+                        let modName = '';
+                        let modDescr = '';
+                        if (item.a_name.length > 16) {
+                            modName = item.a_name.substr(0, 13) + '...';
+                        }
+                        else {
+                            modName = Model.formatField(16, item.a_name);
+                        }
+                        if (item.description.length > 31) {
+                            modDescr = item.description.substr(0, 28) + '...';
+                        }
+                        else {
+                            modDescr = Model.formatField(31, item.description);
+                        }
+                        console.log(`${Model.formatField(9, item.anime_id.toString())}|${modName}|${modDescr}|${Model.formatField(8, item.series.toString())}|${genreName}`);
+                        console.log('_______________________________________________________________________________');
+                    });
+                    console.log(`query time: ${queryTime}ms`);
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
+        }
+        static async specSeriesAnime() {
+            const text = `
+                with specSer as (
+                    select * from anime where series > $1 and series < $2
+                )
+                
+                select an.anime_id, an.a_name, an.series, g_name from specSer an join genre on genre.genre_id = an.genre
+            `;
+            const minSer = readLineSync.question('min series: ');
+            const maxSer = readLineSync.question('max series: ');
+            try {
+                const start = Date.now();
+                const res = await client.query(text, [minSer, maxSer]);
+                const queryTime = Date.now() - start;
+                if (res.rows.length === 0) {
+                    console.log('There is no result for your query');
+                    client.end();
+                }
+                else {
+                    console.log('anime_id |     a_name     | series |      genre');
+                    console.log('_____________________________________________________');
+                    res.rows.forEach((item) => {
+                        let modName = '';
+                        let modDescr = '';
+                        if (item.a_name.length > 16) {
+                            modName = item.a_name.substr(0, 13) + '...';
+                        }
+                        else {
+                            modName = Model.formatField(16, item.a_name);
+                        }
+                        console.log(`${Model.formatField(9, item.anime_id.toString())}|${modName}|${Model.formatField(8, item.series.toString())}|${item.g_name}`);
+                        console.log('_____________________________________________________');
+                    });
+                    console.log(`query time: ${queryTime}ms`);
+                    client.end();
+                }
+            }
+            catch (err) {
+                console.log('Something went wrong');
                 client.end();
             }
         }

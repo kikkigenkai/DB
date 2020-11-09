@@ -10,6 +10,9 @@ namespace TablesDB {
             console.log('Table Review');
             console.log('Table User_Passport');
             console.log('Table Watched');
+            console.log('Generate rows');
+            console.log('Search static');
+            console.log('Search dynamic');
             console.log('\nq to exit\n');
             console.log('   tips: *type table "table name" without quotes');
             console.log('           to pick any table from list.');
@@ -28,6 +31,22 @@ namespace TablesDB {
             console.log('remove data');
             console.log('show data');
             console.log('tip: type command, for example, add');
+            console.log('_____________________________________________________________');
+        }
+
+        static staticSearchMenu(): void {
+            console.log('_____________________________________________________________');
+            console.log('1 Select users, that confirmed and made review to anime,\n  that they watched');
+            console.log('2 Select users that are confirmed and born after 2000');
+            console.log('3 Most popular anime(s) (by views)');
+            console.log('_____________________________________________________________');
+        }
+
+        static dynamicSearchMenu(): void {
+            console.log('_____________________________________________________________');
+            console.log('1 Select confirmed users, who have registered in specific date interval');
+            console.log('2 Select anime with specific genre');
+            console.log('3 Select anime and with specefec count of series and show genre');
             console.log('_____________________________________________________________');
         }
     }

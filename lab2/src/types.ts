@@ -29,8 +29,8 @@ namespace TablesDB {
         length: number,
         columns: {
             r_text: string,
-            user_id: number,
-            anime_id: number
+            rev_user_id: number,
+            rev_anime_id: number
         }
     }
 
@@ -45,8 +45,8 @@ namespace TablesDB {
     export type User_Passport = {
         length: number,
         columns: {
-            passport_id: number,
-            user_id: number
+            up_passport_id: number,
+            up_user_id: number
         }
     }
 

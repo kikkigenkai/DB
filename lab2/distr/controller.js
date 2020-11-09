@@ -23,6 +23,53 @@ var TablesDB;
                         console.log(`There is no ${tname} table`);
                     }
                 },
+                generate: async () => {
+                    await Model.generateRows();
+                },
+                search: async (typeOfSearch) => {
+                    if (typeOfSearch === 'static') {
+                        View.staticSearchMenu();
+                        let ans = readLineSync.question('Choose from list: ');
+                        switch (+ans) {
+                            case 1: {
+                                Model.staticConfirmed();
+                                break;
+                            }
+                            case 2: {
+                                Model.staticBorn();
+                                break;
+                            }
+                            case 3: {
+                                Model.mostPopularAnime();
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
+                    }
+                    else if (typeOfSearch === 'dynamic') {
+                        View.dynamicSearchMenu();
+                        let ans = readLineSync.question('Choose from list: ');
+                        switch (+ans) {
+                            case 1: {
+                                Model.specDateReg();
+                                break;
+                            }
+                            case 2: {
+                                Model.specGenreAnime();
+                                break;
+                            }
+                            case 3: {
+                                Model.specSeriesAnime();
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
+                        }
+                    }
+                },
                 add: async () => {
                     if (currentTable) {
                         switch (currentTable.toLowerCase()) {

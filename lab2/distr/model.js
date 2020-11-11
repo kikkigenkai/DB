@@ -28,26 +28,32 @@ var TablesDB;
             animeRow.columns.genre = readLineSync.question('anime genre id: ');
             return animeRow;
         }
-        static addDataAnime(animeRow) {
+        static async addDataAnime(animeRow) {
             const text = 'INSERT INTO anime (a_name, description, series, genre) VALUES ($1, $2, $3, $4)';
+            const checkQuerry = 'SELECT genre_id FROM genre where genre_id = $1';
             const values = [animeRow.columns.a_name, animeRow.columns.description, animeRow.columns.series, animeRow.columns.genre];
-            client.query('SELECT genre_id FROM genre where genre_id = $1', animeRow.columns.genre, async (err, res) => {
-                if (res.rows.length === 0) {
+            try {
+                const check = await client.query(checkQuerry, [animeRow.columns.genre]);
+                if (check.rows.length === 0) {
                     console.log(`There is no genre_id = ${animeRow.columns.genre} in database`);
-                    await client.end();
+                    client.end();
                 }
                 else {
-                    client.query(text, values, async (err, res) => {
-                        if (err) {
-                            console.log(err.stack);
-                        }
-                        else {
-                            console.log('Added 1 element to table anime');
-                            await client.end();
-                        }
+                    client.query(text, values)
+                        .then((res) => {
+                        console.log('Added 1 element to table anime');
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
                     });
                 }
-            });
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
         }
         static async editDataAnime() {
             const aName = readLineSync.question('name of anime for editing: ');
@@ -158,18 +164,18 @@ var TablesDB;
             genreRow.columns.g_name = readLineSync.question('genre name: ');
             return genreRow;
         }
-        static addDataGenre(genreRow) {
+        static async addDataGenre(genreRow) {
             const text = 'INSERT INTO genre (g_name) VALUES ($1)';
             const values = [genreRow.columns.g_name];
-            client.query(text, values, async (err, res) => {
-                if (err) {
-                    console.log(err.stack);
-                }
-                else {
-                    console.log('Added 1 element to table genre');
-                    await client.end();
-                }
-            });
+            try {
+                await client.query(text, values);
+                console.log('Added 1 element to table genre');
+                client.end();
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
         }
         static async editDataGenre() {
             const gName = readLineSync.question('name of genre for editing: ');
@@ -274,18 +280,18 @@ var TablesDB;
             passportRow.columns.birth_date = readLineSync.question('passport birth date: ');
             return passportRow;
         }
-        static addDataPassport(passportRow) {
+        static async addDataPassport(passportRow) {
             const text = 'INSERT INTO passport (name, surname, birth_date) VALUES ($1, $2, $3)';
             const values = [passportRow.columns.name, passportRow.columns.surname, passportRow.columns.birth_date];
-            client.query(text, values, async (err, res) => {
-                if (err) {
-                    console.log(err.stack);
-                }
-                else {
-                    console.log('Added 1 element to table passport');
-                    await client.end();
-                }
-            });
+            try {
+                await client.query(text, values);
+                console.log('Added 1 element to table passport');
+                client.end();
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
         }
         static async editDataPassport() {
             const pID = readLineSync.question('ID of passport for editing: ');
@@ -398,28 +404,33 @@ var TablesDB;
             reviewRow.columns.rev_anime_id = readLineSync.question('review anime id: ');
             return reviewRow;
         }
-        static addDataReview(reviewRow) {
+        static async addDataReview(reviewRow) {
             const text = 'INSERT INTO review (r_text, rev_user_id, rev_anime_id) VALUES ($1, $2, $3)';
             const values = [reviewRow.columns.r_text, reviewRow.columns.rev_user_id, reviewRow.columns.rev_anime_id];
             const checkQuerry = 'SELECT uu.user_id, aa.anime_id FROM "user" AS uu JOIN anime AS aa ON uu.user_id = $1 AND aa.anime_id = $2';
             const checkValues = [reviewRow.columns.rev_user_id, reviewRow.columns.rev_anime_id];
-            client.query(checkQuerry, checkValues, async (err, res) => {
-                if (res.rows.length === 0) {
+            try {
+                const check = await client.query(checkQuerry, checkValues);
+                if (check.rows.length === 0) {
                     console.log(`There is no user_id = ${reviewRow.columns.rev_user_id} or anime_id = ${reviewRow.columns.rev_anime_id} in database`);
-                    await client.end();
+                    client.end();
                 }
                 else {
-                    client.query(text, values, async (err, res) => {
-                        if (err) {
-                            console.log(err.stack);
-                        }
-                        else {
-                            console.log('Added 1 element to table review');
-                            await client.end();
-                        }
+                    client.query(text, values)
+                        .then((res) => {
+                        console.log('Added 1 element to table review');
+                        client.end();
+                    })
+                        .catch((err) => {
+                        console.log(err.detail);
+                        client.end();
                     });
                 }
-            });
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
         }
         static async editDataReview() {
             const rID = readLineSync.question('ID of review for editing: ');
@@ -523,18 +534,18 @@ var TablesDB;
             userRow.columns.registry_date = this.formatDate(new Date(Date.now()));
             return userRow;
         }
-        static addDataUser(userRow) {
+        static async addDataUser(userRow) {
             const text = 'INSERT INTO "user" (username, registry_date) VALUES ($1, $2)';
             const values = [userRow.columns.username, userRow.columns.registry_date];
-            client.query(text, values, async (err, res) => {
-                if (err) {
-                    console.log(err.stack);
-                }
-                else {
-                    console.log('Added 1 element to table user');
-                    await client.end();
-                }
-            });
+            try {
+                await client.query(text, values);
+                console.log('Added 1 element to table user');
+                client.end();
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
         }
         static async editDataUser() {
             const uID = readLineSync.question('ID of user for editing: ');
@@ -638,37 +649,41 @@ var TablesDB;
             userPassportRow.columns.up_user_id = readLineSync.question('user id: ');
             return userPassportRow;
         }
-        static addDataUserPassport(usPasRow) {
+        static async addDataUserPassport(usPasRow) {
             const text = 'INSERT INTO user_passport (up_user_id, up_passport_id) VALUES ($1, $2)';
             const values = [usPasRow.columns.up_user_id, usPasRow.columns.up_passport_id];
             const checkQuerry = 'SELECT uu.user_id, pp.passport_id FROM "user" AS uu JOIN passport AS pp ON uu.user_id = $1 AND pp.passport_id = $2';
             const checkValues = [usPasRow.columns.up_user_id, usPasRow.columns.up_passport_id];
             const uniqueCheck = 'SELECT up_user_id, up_passport_id FROM user_passport AS up WHERE up.up_user_id = $1 AND up.up_passport_id = $2;';
-            client.query(uniqueCheck, checkValues, async (err, res) => {
-                if (res.rows.length !== 0) {
+            try {
+                const uniq = await client.query(uniqueCheck, checkValues);
+                if (uniq.rows.length !== 0) {
                     console.log(`Row with up_user_id = ${usPasRow.columns.up_user_id} and up_passport_id = ${usPasRow.columns.up_passport_id} already exists in table user_passport`);
-                    await client.end();
+                    client.end();
                 }
                 else {
-                    client.query(checkQuerry, checkValues, async (err, res) => {
-                        if (res.rows.length === 0) {
-                            console.log(`There is no up_user_id = ${usPasRow.columns.up_user_id} or up_passport_id = ${usPasRow.columns.up_passport_id} in database`);
-                            await client.end();
-                        }
-                        else {
-                            client.query(text, values, async (err, res) => {
-                                if (err) {
-                                    console.log(err.stack);
-                                }
-                                else {
-                                    console.log('Added 1 element to table user_passport');
-                                    await client.end();
-                                }
-                            });
-                        }
-                    });
+                    const check = await client.query(checkQuerry, checkValues);
+                    if (check.rows.length === 0) {
+                        console.log(`There is no up_user_id = ${usPasRow.columns.up_user_id} or up_passport_id = ${usPasRow.columns.up_passport_id} in database`);
+                        client.end();
+                    }
+                    else {
+                        client.query(text, values)
+                            .then((res) => {
+                            console.log('Added 1 element to table user_passport');
+                            client.end();
+                        })
+                            .catch((err) => {
+                            console.log(err.detail);
+                            client.end();
+                        });
+                    }
                 }
-            });
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
         }
         static async editDataUserPassport() {
             const upID = readLineSync.question('ID of user_passport record for editing: ');
@@ -770,31 +785,35 @@ var TablesDB;
             const values = [watchRow.columns.watch_anime_id, watchRow.columns.watch_user_id];
             const checkQuerry = 'SELECT uu.user_id, aa.anime_id FROM "user" AS uu JOIN anime AS aa ON aa.anime_id = $1 AND uu.user_id = $2';
             const uniqueCheck = 'SELECT watch_user_id, watch_anime_id FROM watched AS up WHERE up.watch_anime_id = $1 AND up.watch_user_id = $2;';
-            client.query(checkQuerry, values, async (err, res) => {
-                if (res.rows.length === 0) {
-                    console.log(`There is no user_id = ${watchRow.columns.watch_user_id} or anime_id = ${watchRow.columns.watch_anime_id} in database`);
-                    await client.end();
+            try {
+                const checkRes = await client.query(checkQuerry, values);
+                if (checkRes.rows.length === 0) {
+                    console.log(`There is no user_id = ${watchRow.columns.watch_user_id} or anime_id = ${watchRow.columns.watch_anime_id} in DB`);
+                    client.end();
                 }
                 else {
-                    client.query(uniqueCheck, values, async (err, res) => {
-                        if (res.rows.length) {
-                            console.log(`Row with user_id = ${watchRow.columns.watch_user_id} and anime_id = ${watchRow.columns.watch_anime_id} already exists in table watched`);
-                            await client.end();
-                        }
-                        else {
-                            client.query(text, values, async (err, res) => {
-                                if (err) {
-                                    console.log(err.stack);
-                                }
-                                else {
-                                    console.log('Added 1 element to table watched');
-                                    await client.end();
-                                }
-                            });
-                        }
-                    });
+                    const uniq = await client.query(uniqueCheck, values);
+                    if (uniq.rows.length) {
+                        console.log(`Row with user_id = ${watchRow.columns.watch_user_id} and anime_id = ${watchRow.columns.watch_anime_id} already exists in table watched`);
+                        client.end();
+                    }
+                    else {
+                        client.query(text, values)
+                            .then((res) => {
+                            console.log('Added 1 element to table watched');
+                            client.end();
+                        })
+                            .catch((err) => {
+                            console.log(err.detail);
+                            client.end();
+                        });
+                    }
                 }
-            });
+            }
+            catch (err) {
+                console.log('Something went wrong');
+                client.end();
+            }
         }
         static async editDataWatched() {
             const wID = readLineSync.question('ID of watching for editing: ');
@@ -885,12 +904,13 @@ var TablesDB;
                 select substr(characters, (random() * length(characters) + 1)::integer, 10),
                 timestamp '2018-01-10' + random() * (timestamp '2018-01-20' - timestamp '2018-01-10'),
                 cast(cast(round(random()) as character varying) as boolean)
-                from (values('qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM')) as symbols(characters), generate_series(1, 10000);
+                from (values('qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM')) as symbols(characters), generate_series(1, $1);
             `;
+            const count = readLineSync.question('Number of rows: ');
             const start = Date.now();
-            client.query(text)
+            client.query(text, [count])
                 .then((res) => {
-                console.log('10000 rows in table user has been generated');
+                console.log(`${count} rows in table user has been generated`);
                 console.log(`query time: ${Date.now() - start}ms`);
                 client.end();
             })

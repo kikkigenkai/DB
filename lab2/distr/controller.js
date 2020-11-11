@@ -75,43 +75,43 @@ var TablesDB;
                         switch (currentTable.toLowerCase()) {
                             case 'anime': {
                                 const newRow = Model.prepareDataAnime();
-                                await Model.addDataAnime(newRow);
+                                Model.addDataAnime(newRow);
                                 currentTable = '';
                                 break;
                             }
                             case 'genre': {
                                 const newRow = Model.prepareDataGenre();
-                                await Model.addDataGenre(newRow);
+                                Model.addDataGenre(newRow);
                                 currentTable = '';
                                 break;
                             }
                             case 'passport': {
                                 const newRow = Model.prepareDataPassport();
-                                await Model.addDataPassport(newRow);
+                                Model.addDataPassport(newRow);
                                 currentTable = '';
                                 break;
                             }
                             case 'review': {
                                 const newRow = Model.prepareDataReview();
-                                await Model.addDataReview(newRow);
+                                Model.addDataReview(newRow);
                                 currentTable = '';
                                 break;
                             }
                             case 'user': {
                                 const newRow = Model.prepareDataUser();
-                                await Model.addDataUser(newRow);
+                                Model.addDataUser(newRow);
                                 currentTable = '';
                                 break;
                             }
                             case 'user_passport': {
                                 const newRow = Model.prepareDataUserPassport();
-                                await Model.addDataUserPassport(newRow);
+                                Model.addDataUserPassport(newRow);
                                 currentTable = '';
                                 break;
                             }
                             case 'watched': {
                                 const newRow = Model.prepareDataWatched();
-                                await Model.addDataWatched(newRow);
+                                Model.addDataWatched(newRow);
                                 currentTable = '';
                                 break;
                             }

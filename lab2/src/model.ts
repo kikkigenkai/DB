@@ -272,7 +272,7 @@ namespace TablesDB {
                         let modGName: string = '';
 
                         if (item.g_name.length > 21) {
-                            modGName = item.a_name.substr(0, 18) + '...';
+                            modGName = item.g_name.substr(0, 18) + '...';
                         } else {
                             modGName = Model.formatField(21, item.g_name);
                         }

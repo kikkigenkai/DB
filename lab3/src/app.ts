@@ -7,6 +7,13 @@ import { User } from "./entity/User.js";
 import { Review } from "./entity/Review.js";
 import { Watched } from "./entity/Watched.js";
 import { UserPassport } from "./entity/UserPassport.js";
+import { UserService } from './services/UserService.js';
+import { AnimeService } from './services/AnimeService.js';
+import { GenreService } from './services/GenreService.js';
+import { WatchedService } from "./services/WatchedService.js";
+import { ReviewService } from "./services/ReviewService.js";
+import { throws } from "assert";
+import { UserPassportService } from "./services/UserPassportService.js";
 
 createConnection({
     type: "postgres",
@@ -29,11 +36,19 @@ createConnection({
 
     //const kek = await connection.manager.find(User);
     //console.log(kek);
-    const monogat = new Review();
+    // const monogat = new Review();
 
-    monogat.r_text = 'kekekekekekek';
-    monogat.rev_anime_id = 55;
-    monogat.rev_user_id = 5;
+    // monogat.r_text = 'kekekekekekek';
+    // monogat.rev_anime_id = 55;
+    // monogat.rev_user_id = 5;
 
-    await connection.manager.save(monogat);
+    // await connection.manager.save(monogat);
+
+    // const userRepo = connection.getRepository(User);
+    // const users = await userRepo.find({ relations: ['watches'] });
+    // console.log(users[0].watches);
+
+    const up = new UserPassportService(connection);
+    up.showDataUserPassport();
 }).catch(error => console.log(error));
+

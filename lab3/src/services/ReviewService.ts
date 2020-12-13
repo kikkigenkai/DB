@@ -81,7 +81,7 @@ export class ReviewService {
         }
     }
 
-    async deleteDateReview() {
+    async deleteDataReview() {
         const deleteId: number = +question('Review id: ');
 
         try {

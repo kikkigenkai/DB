@@ -4,8 +4,8 @@
          "es5",
          "es6"
       ],
-      "target": "ES2016",
-      "module": "es6",
+      "target": "esnext",
+      "module": "esnext",
       "moduleResolution": "node",
       "outDir": "./build",
       "rootDir": "./src",

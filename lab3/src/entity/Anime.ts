@@ -28,4 +28,5 @@ export class Anime {
 
     @OneToMany(() => Watched, watched => watched.watch_anime_id)
     watches: Watched[];
+    
 }

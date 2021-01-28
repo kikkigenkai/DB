@@ -1,0 +1,32 @@
+{
+   "name": "ts_bd_lab2",
+   "version": "1.0.0",
+   "description": "",
+   "main": "app.js",
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "ts-node build/app.js"
+   },
+   "type": "module",
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "dependencies": {
+      "@types/pg": "^7.14.5",
+      "@types/readline-sync": "^1.4.3",
+      "mysql": "^2.14.1",
+      "pg": "^8.4.1",
+      "readline-sync": "^1.4.10",
+      "reflect-metadata": "^0.1.10",
+      "typeorm": "0.2.29"
+   },
+   "devDependencies": {
+      "@babel/cli": "^7.12.8",
+      "@babel/core": "^7.12.8",
+      "@babel/node": "^7.12.6",
+      "@babel/preset-env": "^7.12.7",
+      "@types/node": "^14.14.10",
+      "ts-node": "3.3.0",
+      "typescript": "3.3.3333"
+   }
+}
